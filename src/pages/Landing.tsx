@@ -19,12 +19,12 @@ const getFeatureCardId = (index: number): ComponentRegistryId => {
 };
 
 const getTechLetterId = (index: number): ComponentRegistryId => {
-  const ids: ComponentRegistryId[] = ['tech-letter-0', 'tech-letter-1', 'tech-letter-2', 'tech-letter-3', 'tech-letter-4', 'tech-letter-5'];
+  const ids: ComponentRegistryId[] = ['tech-letter-0', 'tech-letter-1', 'tech-letter-2', 'tech-letter-3', 'tech-letter-4', 'tech-letter-5', 'tech-letter-6'];
   return ids[index] || 'noID';
 };
 
 const getTechBadgeId = (index: number): ComponentRegistryId => {
-  const ids: ComponentRegistryId[] = ['tech-badge-0', 'tech-badge-1', 'tech-badge-2', 'tech-badge-3', 'tech-badge-4', 'tech-badge-5'];
+  const ids: ComponentRegistryId[] = ['tech-badge-0', 'tech-badge-1', 'tech-badge-2', 'tech-badge-3', 'tech-badge-4', 'tech-badge-5', 'tech-badge-6'];
   return ids[index] || 'noID';
 };
 
@@ -61,10 +61,38 @@ export const Landing: React.FC = () => {
 
   const stats = [
     { label: "Build Time", value: "< 2s" },
-    { label: "Bundle Size", value: "< 50KB" },
-    { label: "TypeScript", value: "100%" },
-    { label: "Performance", value: "A+" }
+    { label: "Bundle Size", value: "< 128KB" },
+    { label: "TypeScript", value: "85% 📘" },
+    { label: "Performance", value: "A+++" }
   ];
+
+  // Helper function to get custom styling for stat cards
+  const getStatCardStyling = (index: number) => {
+    switch (index) {
+      case 1: // Bundle Size card
+        return "bg-white backdrop-blur-sm rounded-xl p-6 text-center border border-gray-200";
+      case 2: // TypeScript card
+        return "bg-yellow-400 backdrop-blur-sm rounded-xl p-6 text-center border border-yellow-500";
+      case 3: // Performance card
+        return "bg-black backdrop-blur-sm rounded-xl p-6 text-center border border-gray-800";
+      default:
+        return "bg-white/5 backdrop-blur-sm rounded-xl p-6 text-center border border-white/10";
+    }
+  };
+
+  // Helper function to get text color for stat cards
+  const getStatCardTextColor = (index: number) => {
+    switch (index) {
+      case 1: // Bundle Size card
+        return { value: "text-black", label: "text-gray-800" };
+      case 2: // TypeScript card
+        return { value: "text-black", label: "text-gray-800" };
+      case 3: // Performance card
+        return { value: "text-white", label: "text-gray-300" };
+      default:
+        return { value: "text-white", label: "text-gray-400" };
+    }
+  };
 
   return (
     <Container componentId="landing-page-root"> {/* Changed to direct ID */}
@@ -277,20 +305,23 @@ export const Landing: React.FC = () => {
             devDescription="Grid container for statistics cards"
             className="grid grid-cols-2 md:grid-cols-4 gap-6"
           >
-            {stats.map((stat, index) => (
-              <Card 
-                key={index} 
-                devId={getStatCardId(index)}
-                devName={`${stat.label} Stat Card`}
-                devDescription={`Statistical card showing ${stat.label}: ${stat.value}`}
-                className="bg-white/5 backdrop-blur-sm rounded-xl p-6 text-center border border-white/10"
-              >
-                <CardContent devId="noID"  className="p-0">
-                  <Div devId="noID" className="text-2xl font-bold text-white mb-2">{stat.value}</Div>
-                  <Div devId="noID" className="text-gray-400">{stat.label}</Div>
-                </CardContent>
-              </Card>
-            ))}
+            {stats.map((stat, index) => {
+              const textColors = getStatCardTextColor(index);
+              return (
+                <Card 
+                  key={index} 
+                  devId={getStatCardId(index)}
+                  devName={`${stat.label} Stat Card`}
+                  devDescription={`Statistical card showing ${stat.label}: ${stat.value}`}
+                  className={getStatCardStyling(index)}
+                >
+                  <CardContent devId="noID"  className="p-0">
+                    <Div devId="noID" className={`text-2xl font-bold mb-2 ${textColors.value}`}>{stat.value}</Div>
+                    <Div devId="noID" className={textColors.label}>{stat.label}</Div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </Div>
         </Section>
       </Container>
@@ -333,14 +364,15 @@ export const Landing: React.FC = () => {
               Built with the most popular and reliable technologies
             </P>
           </Div>
-          <Div devId="noID" className="grid grid-cols-2 md:grid-cols-6 gap-8">
+          <Div devId="noID" className="grid grid-cols-2 md:grid-cols-7 gap-8">
             {[
               { name: "Vite", color: "from-yellow-400 to-orange-500" },
               { name: "React", color: "from-blue-400 to-cyan-400" },
               { name: "TypeScript", color: "from-blue-500 to-blue-600" },
               { name: "MongoDB", color: "from-green-400 to-green-500" },
               { name: "Prisma", color: "from-purple-400 to-purple-500" },
-              { name: "Tailwind", color: "from-teal-400 to-teal-500" }
+              { name: "Tailwind", color: "from-teal-400 to-teal-500" },
+              { name: "Netlify", color: "from-cyan-400 to-blue-500" }
             ].map((tech, index) => (
               <Div key={index} devId="noID" className="text-center">
                 <Div devId={getTechLetterId(index)} className={`w-16 h-16 mx-auto mb-3 rounded-xl bg-gradient-to-br ${tech.color} flex items-center justify-center`}>
